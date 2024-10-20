@@ -9,56 +9,21 @@ function throttle(func, delay) {
     }
 }
 
-function opThrottle(func, delay, options = {trailing: true} ) {
-    let lastexecute = 0
-    let timeout
-    if(options.leading == undefined) {
-        options.leading = false
-    }
-    if(options.trailing == undefined) {
-        options.trailing = false
-    }
+function opThrottle(func, delay, options = {leading: false ,trailing: true} ) {
+    let check = false
     return function(text) {
-        const time = new Date().getTime()
-        if(options.leading && !options.trailing) {
-            if (time-lastexecute >= delay) {
-                lastexecute = time
-                func(text)
-            }
-        }else if (!options.leading && options.trailing) {
-           if (timeout ) {
-            clearTimeout(timeout)
-           }
-            timeout = setTimeout(function() {
-                func(text)
-            },delay)
-           
-        }else if (options.leading && options.trailing) {
-            if (time-lastexecute >= delay) {
-                lastexecute = time+delay
-                func(text)
-            }
-            if (timeout ) {
-                clearTimeout(timeout)
-               }
-                timeout = setTimeout(function() {
-                    func(text)
-                },delay)
+        if(check) return
+
+        check = true
+        if (options.leading) {
+            func(text)
         }
+
+        setTimeout(function() {
+            if(options.trailing && !options.leading) {
+                func(text)
+            }
+            check = false
+        },delay)
     }
 }
-
-function handleInput(text) {
-    console.log('Processing:', text);
-}
-
-// Create debounced function
-const debouncedHandle = opThrottle(handleInput, 300);
-
-// Test it
-console.log('Starting test...');
-debouncedHandle('a');
-debouncedHandle('ap');
-debouncedHandle('app');
-debouncedHandle('appl');
-debouncedHandle('apple');

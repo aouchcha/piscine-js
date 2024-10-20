@@ -11,7 +11,7 @@ function debounce(func, delay) {
 }
 }
 
-function opDebounce(func, delay, options = { leading: false}) {
+function opDebounce(func, delay, options = {leading: false}) {
     let timeout
     let canwe = options.leading
     
@@ -27,17 +27,3 @@ function opDebounce(func, delay, options = { leading: false}) {
     }
 }
 
-function handleInput(text) {
-    console.log('Processing:', text);
-}
-
-// Create debounced function
-const debouncedHandle = opDebounce(handleInput, 300);
-
-// Test it
-console.log('Starting test...');
-debouncedHandle('a');
-debouncedHandle('ap');
-debouncedHandle('app');
-debouncedHandle('appl');
-debouncedHandle('apple');
